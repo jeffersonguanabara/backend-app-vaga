@@ -10,6 +10,4 @@ app.use(cors({
 app.use(express.json());
 app.use(routes);
 
-app.listen(process.env.PORT || 3333,  () => { 
-  console.log("Servidor expresso ouvindo na porta %d no modo %s", this.address().port, app.settings.env)
-});
+app.listen(process.env.PORT || 3333);
