@@ -35,13 +35,11 @@ class CultosController {
         const pessoa_id = pessoa.id;
         console.log('pessoa_id: ', pessoa_id);
 
-        const pessoasCulto = culto.map((culto_id: number) => {
-            return {
-                culto_id,
-                data: data,
-                pessoa_id,
-            }
-        })
+        const pessoasCulto = {
+            culto_id: culto[0],
+            data: data,
+            pessoa_id: pessoa_id
+        };
         
         if (numero <= 62) {
             await knex('pessoas_culto').insert(pessoasCulto);
@@ -49,23 +47,24 @@ class CultosController {
             return response.json({ message : 'Não tem mais vagas!'});
         }
     } else {
-        const pessoasCulto = culto.map((culto_id: number) => {
-            return {
-                culto_id: 0,
-                data: data,
-                pessoa_id: existe.id,
-            }
-        })
+        console.log('entrou no else')
+        const pessoasCulto = {
+            culto_id: culto[0],
+            data: data,
+            pessoa_id: existe.id
+        };
 
-        const exiteNoCulto = await knex('pessoas_culto')
+        const existeNoCulto = await knex('pessoas_culto')
             .where({
                 culto_id: pessoasCulto.culto_id,
                 data: pessoasCulto.data,
                 pessoa_id: pessoasCulto.pessoa_id,
             })
             .first();
+
+        console.log('existe no culto', existeNoCulto);
         
-        if (!exiteNoCulto) {
+        if (!existeNoCulto || existeNoCulto === 'undefined') {
             if (numero <= 62) {
                 await knex('pessoas_culto').insert(pessoasCulto);
             } else {
